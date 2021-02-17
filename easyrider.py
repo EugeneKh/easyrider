@@ -1,6 +1,5 @@
 import json
-
-# json_in = json.loads(input())
+from itertools import combinations
 
 
 class Lines:
@@ -41,25 +40,20 @@ class Lines:
     @staticmethod
     def get_answer():
         starts, stops = set(), set()
-        lines = []
+        all_names = []
         for obj in Lines.lines:
             if obj.diag():
                 starts.add(obj.start_name)
                 stops.add(obj.stop_name)
-                lines.append(obj.names)
+                all_names.append(obj.names)
             else:
                 break
-        print(f'Start stops: {len(starts)} {list(starts)}')
-        print(f'Transfer stops: {len(lines)} {list(lines)}')
-        print(f'Finish stops: {len(stops)} {list(stops)}')
-
-
-s = """[{"bus_id" : 128, "stop_id" : 1, "stop_name" : "Prospekt Avenue", "next_stop" : 3, "stop_type" : "S", "a_time" : "08:12"}, 
-{"bus_id" : 128, "stop_id" : 3, "stop_name" : "Elm Street", "next_stop" : 5, "stop_type" : "", "a_time" : "08:19"}, 
-{"bus_id" : 128, "stop_id" : 5, "stop_name" : "Fifth Avenue", "next_stop" : 7, "stop_type" : "O", "a_time" : "08:25"}, 
-{"bus_id" : 128, "stop_id" : 7, "stop_name" : "Sesame Street", "next_stop" : 0, "stop_type" : "F", "a_time" : "08:37"}, 
-{"bus_id" : 512, "stop_id" : 4, "stop_name" : "Bourbon Street", "next_stop" : 6, "stop_type" : "", "a_time" : "08:13"}, 
-{"bus_id" : 512, "stop_id" : 6, "stop_name" : "Sunset Boulevard", "next_stop" : 0, "stop_type" : "F", "a_time" : "08:16"}]"""
+        all_stops = set()
+        for a, b in combinations(all_names, 2):
+            all_stops |= set.intersection(a, b)
+        print(f'Start stops: {len(starts)} {sorted(list(starts))}')
+        print(f'Transfer stops: {len(all_stops)} {sorted(list(all_stops))}')
+        print(f'Finish stops: {len(stops)} {sorted(list(stops))}')
 
 
 Lines.set_data(json.loads(input()))
